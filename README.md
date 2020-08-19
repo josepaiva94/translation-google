@@ -1,7 +1,7 @@
-# translation-google 
-<a href="https://www.npmjs.com/package/translation-google"><img src="https://img.shields.io/npm/dt/translation-google.svg" alt="Downloads"></a>
-<a href="https://www.npmjs.com/package/translation-google"><img src="https://img.shields.io/npm/v/translation-google.svg" alt="Version"></a>
-<a href="https://www.npmjs.com/package/translation-google"><img src="https://img.shields.io/npm/l/translation-google.svg" alt="License"></a>
+# translation-google [adapted from Wilson Wu's package](https://github.com/wilsonwu/translation-google)
+<a href="https://www.npmjs.com/package/@paiva/translation-google"><img src="https://img.shields.io/npm/dt/@paiva/translation-google.svg" alt="Downloads"></a>
+<a href="https://www.npmjs.com/package/@paiva/translation-google"><img src="https://img.shields.io/npm/v/@paiva/translation-google.svg" alt="Version"></a>
+<a href="https://www.npmjs.com/package/@paiva/translation-google"><img src="https://img.shields.io/npm/l/@paiva/translation-google.svg" alt="License"></a>
 
 A Google Translate API:
 
@@ -9,9 +9,10 @@ A Google Translate API:
 
 - Translate all languages that Google Translate supports.
 - Support different area (Support Chinese user, in China Mainland could set the suffix to `'cn'` to make it work)
+- Support for proxy agents
 
 ## Live Demo with Nodejs
-[![Edit translation-google-demo](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/youthful-napier-2bi1c?fontsize=14&hidenavigation=1&theme=dark)
+[![Edit translation-google-demo](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/paiva-translation-google-demo-137ds)
 
 ## Install 
 
