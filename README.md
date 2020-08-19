@@ -2,6 +2,7 @@
 <a href="https://www.npmjs.com/package/@paiva/translation-google"><img src="https://img.shields.io/npm/dt/@paiva/translation-google.svg" alt="Downloads"></a>
 <a href="https://www.npmjs.com/package/@paiva/translation-google"><img src="https://img.shields.io/npm/v/@paiva/translation-google.svg" alt="Version"></a>
 <a href="https://www.npmjs.com/package/@paiva/translation-google"><img src="https://img.shields.io/npm/l/@paiva/translation-google.svg" alt="License"></a>
+[![Coverage Status](https://coveralls.io/repos/github/josepaiva94/translation-google/badge.svg?branch=master)](https://coveralls.io/github/josepaiva94/translation-google?branch=master)
 
 A Google Translate API:
 

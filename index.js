@@ -188,8 +188,9 @@ function translate(text, options) {
             ]
         ),
         retry: {
-            limit: 10,
-            methods: ['POST']
+            limit: 50,
+            methods: ['POST'],
+            retry: ({attemptCount}) => (1000 * 2 * attemptCount) + (Math.random() * 100)
         }
     })
         .json()
