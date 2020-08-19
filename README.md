@@ -21,10 +21,10 @@ npm install translation-google
 
 ## Usage
 
-From automatic language detection to English:
+From automatic language detection to Chinese:
 
 ``` js
-var translate = require('translation-google');
+const {translate} = require('translation-google');
 
 translate('This is Google Translate', {to: 'zh-cn'}).then(res => {
     console.log(res.text);
@@ -39,11 +39,9 @@ translate('This is Google Translate', {to: 'zh-cn'}).then(res => {
 For Chinese user, try this:
 
 ``` js
-var translate = require('translation-google');
+const {translate} = require('translation-google');
 
-translate.suffix = 'cn'; // also can be 'fr', 'de' and so on, default is 'com'
-
-translate('This is Google Translate', {to: 'zh-cn'}).then(res => {
+translate('This is Google Translate', {to: 'zh-cn', suffix: 'cn'}).then(res => {
     console.log(res.text);
     //=> 这是Google翻译
     console.log(res.from.language.iso);
@@ -71,6 +69,31 @@ translate('This is Google Translat', {from: 'en', to: 'zh-cn'}).then(res => {
 });
 ```
 
+Proxying requests through Tor rotator to overcome quota limit:
+
+``` bash
+# use docker image for Tor cluster
+docker run -d -p 5566:5566 -p 4444:4444 --env tors=25 mattes/rotating-proxy
+```
+
+``` js
+const {translate} = require('translation-google');
+const {HttpProxyAgent} = require('http-proxy-agent');
+const {HttpsProxyAgent} = require('https-proxy-agent');
+
+translate('This is Google Translate', {to: 'zh-cn', agent: {
+    http: new HttpProxyAgent('http://localhost:5566'),
+    https: new HttpsProxyAgent('http://localhost:5566')
+}}).then(res => {
+    console.log(res.text);
+    //=> 这是Google翻译
+    console.log(res.from.language.iso);
+    //=> en
+}).catch(err => {
+    console.error(err);
+});
+```
+
 ## API
 
 ### translate(text, options)
@@ -84,6 +107,12 @@ The text to be translated
 #### options
 
 Type: `object`
+
+##### suffix
+
+Type: `string` Default: `com`
+
+The TLD to use. By default, it is `com`, but a Chinese user, in China Mainland, could set the suffix to `'cn'` to make it work.
 
 ##### from
 
@@ -102,6 +131,12 @@ The language in which the text should be translated. Must be one of the codes/na
 Type: `boolean` Default: `false`
 
 If `true`, the returned object will have a `raw` property with the raw response (`string`) from Google Translate.
+
+##### agent
+
+Type: `object` Default: `undefined`
+
+An object representing `http`, `https` and `http2` keys for `http.Agent`, `https.Agent` and `http2wrapper.Agent` instance. This allows to proxy the requests.
 
 ### Returns an `object`:
 

@@ -1,129 +1,125 @@
-var querystring = require('querystring');
+const got = require('got');
 
-var got = require('got');
-var safeEval = require('safe-eval');
-
-translate.suffix = 'com';
-
-var languages = {
-    'auto': 'Automatic',
-    'af': 'Afrikaans',
-    'sq': 'Albanian',
-    'am': 'Amharic',
-    'ar': 'Arabic',
-    'hy': 'Armenian',
-    'az': 'Azerbaijani',
-    'eu': 'Basque',
-    'be': 'Belarusian',
-    'bn': 'Bengali',
-    'bs': 'Bosnian',
-    'bg': 'Bulgarian',
-    'ca': 'Catalan',
-    'ceb': 'Cebuano',
-    'ny': 'Chichewa',
+const languages = {
+    auto: 'Automatic',
+    af: 'Afrikaans',
+    sq: 'Albanian',
+    am: 'Amharic',
+    ar: 'Arabic',
+    hy: 'Armenian',
+    az: 'Azerbaijani',
+    eu: 'Basque',
+    be: 'Belarusian',
+    bn: 'Bengali',
+    bs: 'Bosnian',
+    bg: 'Bulgarian',
+    ca: 'Catalan',
+    ceb: 'Cebuano',
+    ny: 'Chichewa',
     'zh-cn': 'Chinese Simplified',
     'zh-tw': 'Chinese Traditional',
-    'co': 'Corsican',
-    'hr': 'Croatian',
-    'cs': 'Czech',
-    'da': 'Danish',
-    'nl': 'Dutch',
-    'en': 'English',
-    'eo': 'Esperanto',
-    'et': 'Estonian',
-    'tl': 'Filipino',
-    'fi': 'Finnish',
-    'fr': 'French',
-    'fy': 'Frisian',
-    'gl': 'Galician',
-    'ka': 'Georgian',
-    'de': 'German',
-    'el': 'Greek',
-    'gu': 'Gujarati',
-    'ht': 'Haitian Creole',
-    'ha': 'Hausa',
-    'haw': 'Hawaiian',
-    'iw': 'Hebrew',
-    'hi': 'Hindi',
-    'hmn': 'Hmong',
-    'hu': 'Hungarian',
-    'is': 'Icelandic',
-    'ig': 'Igbo',
-    'id': 'Indonesian',
-    'ga': 'Irish',
-    'it': 'Italian',
-    'ja': 'Japanese',
-    'jw': 'Javanese',
-    'kn': 'Kannada',
-    'kk': 'Kazakh',
-    'km': 'Khmer',
-    'ko': 'Korean',
-    'ku': 'Kurdish (Kurmanji)',
-    'ky': 'Kyrgyz',
-    'lo': 'Lao',
-    'la': 'Latin',
-    'lv': 'Latvian',
-    'lt': 'Lithuanian',
-    'lb': 'Luxembourgish',
-    'mk': 'Macedonian',
-    'mg': 'Malagasy',
-    'ms': 'Malay',
-    'ml': 'Malayalam',
-    'mt': 'Maltese',
-    'mi': 'Maori',
-    'mr': 'Marathi',
-    'mn': 'Mongolian',
-    'my': 'Myanmar (Burmese)',
-    'ne': 'Nepali',
-    'no': 'Norwegian',
-    'ps': 'Pashto',
-    'fa': 'Persian',
-    'pl': 'Polish',
-    'pt': 'Portuguese',
-    'ma': 'Punjabi',
-    'ro': 'Romanian',
-    'ru': 'Russian',
-    'sm': 'Samoan',
-    'gd': 'Scots Gaelic',
-    'sr': 'Serbian',
-    'st': 'Sesotho',
-    'sn': 'Shona',
-    'sd': 'Sindhi',
-    'si': 'Sinhala',
-    'sk': 'Slovak',
-    'sl': 'Slovenian',
-    'so': 'Somali',
-    'es': 'Spanish',
-    'su': 'Sundanese',
-    'sw': 'Swahili',
-    'sv': 'Swedish',
-    'tg': 'Tajik',
-    'ta': 'Tamil',
-    'te': 'Telugu',
-    'th': 'Thai',
-    'tr': 'Turkish',
-    'uk': 'Ukrainian',
-    'ur': 'Urdu',
-    'uz': 'Uzbek',
-    'vi': 'Vietnamese',
-    'cy': 'Welsh',
-    'xh': 'Xhosa',
-    'yi': 'Yiddish',
-    'yo': 'Yoruba',
-    'zu': 'Zulu'
+    co: 'Corsican',
+    hr: 'Croatian',
+    cs: 'Czech',
+    da: 'Danish',
+    nl: 'Dutch',
+    en: 'English',
+    eo: 'Esperanto',
+    et: 'Estonian',
+    tl: 'Filipino',
+    fi: 'Finnish',
+    fr: 'French',
+    fy: 'Frisian',
+    gl: 'Galician',
+    ka: 'Georgian',
+    de: 'German',
+    el: 'Greek',
+    gu: 'Gujarati',
+    ht: 'Haitian Creole',
+    ha: 'Hausa',
+    haw: 'Hawaiian',
+    iw: 'Hebrew',
+    hi: 'Hindi',
+    hmn: 'Hmong',
+    hu: 'Hungarian',
+    is: 'Icelandic',
+    ig: 'Igbo',
+    id: 'Indonesian',
+    ga: 'Irish',
+    it: 'Italian',
+    ja: 'Japanese',
+    jw: 'Javanese',
+    kn: 'Kannada',
+    kk: 'Kazakh',
+    km: 'Khmer',
+    ko: 'Korean',
+    ku: 'Kurdish (Kurmanji)',
+    ky: 'Kyrgyz',
+    lo: 'Lao',
+    la: 'Latin',
+    lv: 'Latvian',
+    lt: 'Lithuanian',
+    lb: 'Luxembourgish',
+    mk: 'Macedonian',
+    mg: 'Malagasy',
+    ms: 'Malay',
+    ml: 'Malayalam',
+    mt: 'Maltese',
+    mi: 'Maori',
+    mr: 'Marathi',
+    mn: 'Mongolian',
+    my: 'Myanmar (Burmese)',
+    ne: 'Nepali',
+    no: 'Norwegian',
+    ps: 'Pashto',
+    fa: 'Persian',
+    pl: 'Polish',
+    pt: 'Portuguese',
+    ma: 'Punjabi',
+    ro: 'Romanian',
+    ru: 'Russian',
+    sm: 'Samoan',
+    gd: 'Scots Gaelic',
+    sr: 'Serbian',
+    st: 'Sesotho',
+    sn: 'Shona',
+    sd: 'Sindhi',
+    si: 'Sinhala',
+    sk: 'Slovak',
+    sl: 'Slovenian',
+    so: 'Somali',
+    es: 'Spanish',
+    su: 'Sundanese',
+    sw: 'Swahili',
+    sv: 'Swedish',
+    tg: 'Tajik',
+    ta: 'Tamil',
+    te: 'Telugu',
+    th: 'Thai',
+    tr: 'Turkish',
+    uk: 'Ukrainian',
+    ur: 'Urdu',
+    uz: 'Uzbek',
+    vi: 'Vietnamese',
+    cy: 'Welsh',
+    xh: 'Xhosa',
+    yi: 'Yiddish',
+    yo: 'Yoruba',
+    zu: 'Zulu'
 };
 
 function getCode(desiredLang) {
     if (!desiredLang) {
         return false;
     }
+
     desiredLang = desiredLang.toLowerCase();
 
     if (languages[desiredLang]) {
         return desiredLang;
     }
 
-    var keys = Object.keys(languages).filter(function (key) {
+    const langKey = Object.keys(languages).find(key => {
         if (typeof languages[key] !== 'string') {
             return false;
         }
@@ -131,111 +127,128 @@ function getCode(desiredLang) {
         return languages[key].toLowerCase() === desiredLang;
     });
 
-    return keys[0] || false;
+    return langKey || false;
 }
 
 function isSupported(desiredLang) {
     return Boolean(getCode(desiredLang));
 }
 
-function translate(text, opts) {
-    opts = opts || {};
+function translate(text, options) {
+    options = options || {};
 
-    var e;
-    [opts.from, opts.to].forEach(function (lang) {
+    let error;
+    [options.from, options.to].forEach(lang => {
         if (lang && !isSupported(lang)) {
-            e = new Error();
-            e.code = 400;
-            e.message = 'The language \'' + lang + '\' is not supported';
+            error = new Error();
+            error.code = 400;
+            error.message = 'The language \'' + lang + '\' is not supported';
         }
     });
-    if (e) {
-        return new Promise(function (resolve, reject) {
-            reject(e);
+    if (error) {
+        return new Promise((resolve, reject) => {
+            reject(error);
         });
     }
 
-    opts.from = opts.from || 'auto';
-    opts.to = opts.to || 'en';
+    options.suffix = options.suffix || 'com';
+    options.from = options.from || 'auto';
+    options.to = options.to || 'en';
 
-    opts.from = getCode(opts.from);
-    opts.to = getCode(opts.to);
-    var url = 'https://translate.google.' + translate.suffix + '/translate_a/single';
-    var data = {
-        client: 'gtx',
-        sl: opts.from,
-        tl: opts.to,
-        hl: opts.to,
-        dt: ['at', 'bd', 'ex', 'ld', 'md', 'qca', 'rw', 'rm', 'ss', 't'],
-        ie: 'UTF-8',
-        oe: 'UTF-8',
-        otf: 1,
-        ssel: 0,
-        tsel: 0,
-        kc: 7
-    };
-    url = url + '?' + querystring.stringify(data);
+    options.from = getCode(options.from);
+    options.to = getCode(options.to);
 
-    return got(url, { 
-        'method': 'POST', 
-        'body': {
-            q: text
-        }
-    }).then(function (res) {
-        var result = {
-            text: '',
-            from: {
-                language: {
-                    didYouMean: false,
-                    iso: ''
+    const url = 'https://translate.google.' + options.suffix + '/translate_a/single';
+
+    return got.post(url, {
+        agent: options.agent,
+        searchParams: new URLSearchParams(
+            [
+                ['client', 'gtx'],
+                ['sl', options.from],
+                ['tl', options.to],
+                ['hl', options.to],
+                ['dt', 'at'],
+                ['dt', 'bd'],
+                ['dt', 'ex'],
+                ['dt', 'ld'],
+                ['dt', 'md'],
+                ['dt', 'qca'],
+                ['dt', 'rw'],
+                ['dt', 'rm'],
+                ['dt', 'ss'],
+                ['dt', 't'],
+                ['ie', 'UTF-8'],
+                ['oe', 'UTF-8'],
+                ['otf', 1],
+                ['ssel', 0],
+                ['tsel', 0],
+                ['kc', 7],
+                ['q', text]
+            ]
+        ),
+        retry: 10
+    })
+        .json()
+        .then(body => {
+            const result = {
+                text: '',
+                from: {
+                    language: {
+                        didYouMean: false,
+                        iso: ''
+                    },
+                    text: {
+                        autoCorrected: false,
+                        value: '',
+                        didYouMean: false
+                    }
                 },
-                text: {
-                    autoCorrected: false,
-                    value: '',
-                    didYouMean: false
+                raw: ''
+            };
+
+            if (options.raw) {
+                result.raw = body;
+            }
+
+            body[0].forEach(o => {
+                if (o[0]) {
+                    result.text += o[0];
                 }
-            },
-            raw: ''
-        };
+            });
 
-        if (opts.raw) {
-            result.raw = res.body;
-        }
-
-        var body = safeEval(res.body);
-        body[0].forEach(function (obj) {
-            if (obj[0]) {
-                result.text += obj[0];
-            }
-        });
-
-        if (body[2] === body[8][0][0]) {
-            result.from.language.iso = body[2];
-        } else {
-            result.from.language.didYouMean = true;
-            result.from.language.iso = body[8][0][0];
-        }
-
-        if (body[7] && body[7][0]) {
-            var str = body[7][0];
-
-            str = str.replace(/<b><i>/g, '[');
-            str = str.replace(/<\/i><\/b>/g, ']');
-
-            result.from.text.value = str;
-
-            if (body[7][5] === true) {
-                result.from.text.autoCorrected = true;
+            if (body[2] === body[8][0][0]) {
+                result.from.language.iso = body[2];
             } else {
-                result.from.text.didYouMean = true;
+                result.from.language.didYouMean = true;
+                result.from.language.iso = body[8][0][0];
             }
-        }
 
-        return result;
-    }).catch(function (err) {
-        throw err;
-    });
+            if (body[7] && body[7][0]) {
+                let translatedText = body[7][0];
+
+                translatedText = translatedText.replace(/<b><i>/g, '[');
+                translatedText = translatedText.replace(/<\/i><\/b>/g, ']');
+
+                result.from.text.value = translatedText;
+
+                if (body[7][5] === true) {
+                    result.from.text.autoCorrected = true;
+                } else {
+                    result.from.text.didYouMean = true;
+                }
+            }
+
+            return result;
+        }).catch(error => {
+            console.log(error);
+            throw error;
+        });
 }
 
-module.exports = translate;
-module.exports.languages = languages;
+module.exports = {
+    translate,
+    languages,
+    getCode,
+    isSupported
+};

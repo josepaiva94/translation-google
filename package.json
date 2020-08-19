@@ -1,6 +1,6 @@
 {
   "name": "translation-google",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "A Google Translate API.",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wilsonwu/translation-google.git"
+    "url": "https://github.com/josepaiva94/translation-google.git"
   },
   "keywords": [
     "translate",
@@ -21,26 +21,27 @@
     "language"
   ],
   "author": {
-    "name": "Wilson Wu",
-    "email": "iwilsonwu@gmail.com",
-    "url": "https://github.com/wilsonwu"
+    "name": "José C. Paiva",
+    "email": "josepaiva94@gmail.com",
+    "url": "https://github.com/josepaiva94"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wilsonwu/translation-google/issues"
+    "url": "https://github.com/josepaiva94/translation-google/issues"
   },
-  "homepage": "https://github.com/wilsonwu/translation-google",
+  "homepage": "https://github.com/josepaiva94/translation-google",
   "dependencies": {
-    "configstore": "^2.0.0",
-    "got": "^6.3.0",
-    "safe-eval": "^0.4.1"
+    "got": "^11.0.0"
   },
   "devDependencies": {
-    "ava": "^0.15.2",
+    "ava": "^3.11.1",
     "codecov": "^3.6.5",
-    "coveralls": "^2.11.11",
-    "nyc": "^7.0.0",
-    "xo": "^0.16.0"
+    "coveralls": "^3.1.0",
+    "nyc": "^15.1.0",
+    "xo": "^0.33.0",
+    "http-proxy-agent": "^4.0.1",
+    "https-proxy-agent": "^5.0.0",
+    "socks-proxy-agent": "^5.0.0"
   },
   "xo": {
     "space": 4
