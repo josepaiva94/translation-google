@@ -187,7 +187,10 @@ function translate(text, options) {
                 ['q', text]
             ]
         ),
-        retry: 10
+        retry: {
+            limit: 10,
+            methods: ['POST']
+        }
     })
         .json()
         .then(body => {
