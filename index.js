@@ -137,30 +137,40 @@ function isSupported(desiredLang) {
 function retryPost(url, options = {}, retries = 10, backoff = 300) {
     const retryCodes = new Set([408, 429, 500, 502, 503, 504, 522, 524]);
     return new Promise((resolve, reject) => {
-        https.request(url, {
-            method: 'POST',
-            rejectUnauthorized: false,
-            ...options
-        }, response => {
-            let data = '';
-            const {statusCode} = response;
-            if (statusCode < 200 || statusCode > 299) {
-                if (retries > 0 && retryCodes.has(statusCode)) {
-                    setTimeout(() => {
-                        resolve(retryPost(url, options, retries - 1, backoff * 2));
-                    }, backoff);
+        try {
+            https.request(url, {
+                method: 'POST',
+                rejectUnauthorized: false,
+                ...options
+            }, response => {
+                let data = '';
+                const {statusCode} = response;
+                if (statusCode < 200 || statusCode > 299) {
+                    if (retries > 0 && retryCodes.has(statusCode)) {
+                        setTimeout(() => {
+                            resolve(retryPost(url, options, retries - 1, backoff * 2));
+                        }, backoff);
+                    } else {
+                        reject(new Error(response));
+                    }
                 } else {
-                    reject(new Error(response));
+                    response.on('data', d => {
+                        data += d;
+                    });
+                    response.on('end', () => {
+                        resolve(JSON.parse(data));
+                    });
                 }
+            }).end();
+        } catch (error) {
+            if (retries > 0) {
+                setTimeout(() => {
+                    resolve(retryPost(url, options, retries - 1, backoff * 2));
+                }, backoff);
             } else {
-                response.on('data', d => {
-                    data += d;
-                });
-                response.on('end', () => {
-                    resolve(JSON.parse(data));
-                });
+                reject(error);
             }
-        }).end();
+        }
     });
 }
 
