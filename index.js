@@ -147,7 +147,7 @@ function retryPost(url, options = {}, retries = 10, backoff = 300) {
             if (statusCode < 200 || statusCode > 299) {
                 if (retries > 0 && retryCodes.has(statusCode)) {
                     setTimeout(() => {
-                        return retryPost(url, options, retries - 1, backoff * 2);
+                        resolve(retryPost(url, options, retries - 1, backoff * 2))
                     }, backoff);
                 } else {
                     reject(new Error(response));
