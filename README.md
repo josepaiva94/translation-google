@@ -26,7 +26,7 @@ npm install translation-google
 From automatic language detection to Chinese:
 
 ``` js
-const {translate} = require('translation-google');
+const {translate} = require('@paiva/translation-google');
 
 translate('This is Google Translate', {to: 'zh-cn'}).then(res => {
     console.log(res.text);
@@ -41,7 +41,7 @@ translate('This is Google Translate', {to: 'zh-cn'}).then(res => {
 For Chinese user, try this:
 
 ``` js
-const {translate} = require('translation-google');
+const {translate} = require('@paiva/translation-google');
 
 translate('This is Google Translate', {to: 'zh-cn', suffix: 'cn'}).then(res => {
     console.log(res.text);
@@ -79,7 +79,7 @@ docker run -d -p 5566:5566 -p 4444:4444 --env tors=25 mattes/rotating-proxy
 ```
 
 ``` js
-const {translate} = require('translation-google');
+const {translate} = require('@paiva/translation-google');
 const {HttpsProxyAgent} = require('https-proxy-agent');
 
 translate('This is Google Translate', {

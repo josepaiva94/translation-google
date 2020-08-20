@@ -134,7 +134,7 @@ function isSupported(desiredLang) {
     return Boolean(getCode(desiredLang));
 }
 
-function retryPost(url, options = {}, retries = 3, backoff = 300) {
+function retryPost(url, options = {}, retries = 10, backoff = 300) {
     const retryCodes = new Set([408, 429, 500, 502, 503, 504, 522, 524]);
     return new Promise((resolve, reject) => {
         https.request(url, {
@@ -216,7 +216,7 @@ function translate(text, options) {
     );
     return retryPost(url + '?' + searchParameters.toString(), {
         agent: options.agent
-    })
+    }, options.retries, options.backoff)
         .then(body => {
             const result = {
                 text: '',
@@ -268,7 +268,6 @@ function translate(text, options) {
 
             return result;
         }).catch(error => {
-            console.log(error);
             throw error;
         });
 }
