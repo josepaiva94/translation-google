@@ -1,4 +1,4 @@
-const got = require('got');
+const https = require('https');
 
 const languages = {
     auto: 'Automatic',
@@ -134,6 +134,36 @@ function isSupported(desiredLang) {
     return Boolean(getCode(desiredLang));
 }
 
+function retryPost(url, options = {}, retries = 3, backoff = 300) {
+    const retryCodes = new Set([408, 429, 500, 502, 503, 504, 522, 524]);
+    return new Promise((resolve, reject) => {
+        https.request(url, {
+            method: 'POST',
+            rejectUnauthorized: false,
+            ...options
+        }, response => {
+            let data = '';
+            const {statusCode} = response;
+            if (statusCode < 200 || statusCode > 299) {
+                if (retries > 0 && retryCodes.has(statusCode)) {
+                    setTimeout(() => {
+                        return retryPost(url, options, retries - 1, backoff * 2);
+                    }, backoff);
+                } else {
+                    reject(new Error(response));
+                }
+            } else {
+                response.on('data', d => {
+                    data += d;
+                });
+                response.on('end', () => {
+                    resolve(JSON.parse(data));
+                });
+            }
+        }).end();
+    });
+}
+
 function translate(text, options) {
     options = options || {};
 
@@ -159,41 +189,34 @@ function translate(text, options) {
     options.to = getCode(options.to);
 
     const url = 'https://translate.google.' + options.suffix + '/translate_a/single';
-
-    return got.post(url, {
-        agent: options.agent,
-        searchParams: new URLSearchParams(
-            [
-                ['client', 'gtx'],
-                ['sl', options.from],
-                ['tl', options.to],
-                ['hl', options.to],
-                ['dt', 'at'],
-                ['dt', 'bd'],
-                ['dt', 'ex'],
-                ['dt', 'ld'],
-                ['dt', 'md'],
-                ['dt', 'qca'],
-                ['dt', 'rw'],
-                ['dt', 'rm'],
-                ['dt', 'ss'],
-                ['dt', 't'],
-                ['ie', 'UTF-8'],
-                ['oe', 'UTF-8'],
-                ['otf', 1],
-                ['ssel', 0],
-                ['tsel', 0],
-                ['kc', 7],
-                ['q', text]
-            ]
-        ),
-        retry: {
-            limit: 50,
-            methods: ['POST'],
-            retry: ({attemptCount}) => (1000 * 2 * attemptCount) + (Math.random() * 100)
-        }
+    const searchParameters = new URLSearchParams(
+        [
+            ['client', 'gtx'],
+            ['sl', options.from],
+            ['tl', options.to],
+            ['hl', options.to],
+            ['dt', 'at'],
+            ['dt', 'bd'],
+            ['dt', 'ex'],
+            ['dt', 'ld'],
+            ['dt', 'md'],
+            ['dt', 'qca'],
+            ['dt', 'rw'],
+            ['dt', 'rm'],
+            ['dt', 'ss'],
+            ['dt', 't'],
+            ['ie', 'UTF-8'],
+            ['oe', 'UTF-8'],
+            ['otf', 1],
+            ['ssel', 0],
+            ['tsel', 0],
+            ['kc', 7],
+            ['q', text]
+        ]
+    );
+    return retryPost(url + '?' + searchParameters.toString(), {
+        agent: options.agent
     })
-        .json()
         .then(body => {
             const result = {
                 text: '',

@@ -80,13 +80,12 @@ docker run -d -p 5566:5566 -p 4444:4444 --env tors=25 mattes/rotating-proxy
 
 ``` js
 const {translate} = require('translation-google');
-const {HttpProxyAgent} = require('http-proxy-agent');
 const {HttpsProxyAgent} = require('https-proxy-agent');
 
-translate('This is Google Translate', {to: 'zh-cn', agent: {
-    http: new HttpProxyAgent('http://localhost:5566'),
-    https: new HttpsProxyAgent('http://localhost:5566')
-}}).then(res => {
+translate('This is Google Translate', {
+    to: 'zh-cn',
+    agent: new HttpsProxyAgent('http://localhost:8118')
+}).then(res => {
     console.log(res.text);
     //=> 这是Google翻译
     console.log(res.from.language.iso);
