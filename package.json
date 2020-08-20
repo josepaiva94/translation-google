@@ -25,14 +25,14 @@
     "url": "https://github.com/josepaiva94/translation-google/issues"
   },
   "homepage": "https://github.com/josepaiva94/translation-google",
-  "dependencies": {},
+  "dependencies": {
+    "follow-redirects": "^1.13.0"
+  },
   "devDependencies": {
     "ava": "^3.11.1",
     "codecov": "^3.6.5",
     "coveralls": "^3.1.0",
-    "https-proxy-agent": "^5.0.0",
     "nyc": "^15.1.0",
-    "socks-proxy-agent": "^5.0.0",
     "xo": "^0.33.0"
   },
   "xo": {

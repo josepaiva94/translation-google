@@ -1,4 +1,4 @@
-const https = require('https');
+const {https} = require('follow-redirects');
 
 const languages = {
     auto: 'Automatic',
